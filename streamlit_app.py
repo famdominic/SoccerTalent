@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
 
 # Page Configuration
 st.set_page_config(
@@ -142,26 +141,16 @@ if selected_player:
         st.info(f"💡 **Scouting Summary:** Valued at **€{player_data['Market Value (€M)']}M**, but performs at a level worth approximately **€{player_data['Expected Value (€M)']}M**.")
         
     with p_col2:
-        # Simple Bar Chart visualization for metrics comparison
-        fig, ax = plt.subplots(figsize=(6, 3))
-        metrics = ['Prog Carries', 'xG + xA', 'Def Duels %', 'Pass Acc %']
-        # Normalize sample values for visual scaling
-        values = [
-            player_data['Prog Carries/90'] / 10 * 100,
-            player_data['xG + xA/90'] * 100,
-            player_data['Def Duels Won %'],
-            player_data['Pass Acc %']
-        ]
+        st.markdown(f"**Performance Profile: {player_data['Player']}**")
+        # Normalize sample values for visual scaling (0-100 scale)
+        metrics_df = pd.DataFrame({
+            "Metric": ['Prog Carries', 'xG + xA', 'Def Duels %', 'Pass Acc %'],
+            "Score": [
+                player_data['Prog Carries/90'] / 10 * 100,
+                player_data['xG + xA/90'] * 100,
+                player_data['Def Duels Won %'],
+                player_data['Pass Acc %']
+            ]
+        }).set_index("Metric")
         
-        bars = ax.barh(metrics, values, color='#1f77b4')
-        ax.set_xlim(0, 100)
-        ax.set_xlabel("Percentile Estimate / Metric Score")
-        ax.set_title(f"Performance Profile: {player_data['Player']}")
-        
-        # Add value labels
-        for bar in bars:
-            width = bar.get_width()
-            ax.text(width + 2, bar.get_y() + bar.get_height()/2, f'{width:.1f}', 
-                    va='center', ha='left', fontsize=9, color='black')
-            
-        st.pyplot(fig)
+        st.bar_chart(metrics_df, horizontal=True)
