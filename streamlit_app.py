@@ -47,8 +47,8 @@ def load_scouting_data():
     data = []
     for i, name in enumerate(names):
         pos = np.random.choice(positions)
-        age = np.randint(17, 22)
-        mins = np.randint(1200, 2800)
+        age = np.random.randint(17, 22)
+        mins = np.random.randint(1200, 2800)
         
         # Performance metrics (per 90 minutes / normalized scales)
         prog_carries = round(np.random.uniform(2.0, 8.5), 2)
@@ -57,7 +57,7 @@ def load_scouting_data():
         pass_accuracy = round(np.random.uniform(75.0, 91.0), 1)
         
         # Financials
-        actual_val = round(np.random.uniform(1.5, 12.0), 1) # Millions €
+        actual_val = round(np.random.uniform(1.5, 12.0), 1)  # Millions €
         
         data.append({
             "Player": name,
